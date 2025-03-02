@@ -1,0 +1,25 @@
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+.form-control:focus{
+  box-shadow: none;
+}
+tbody, td, tfoot, th, thead, tr{
+  vertical-align: text-top;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.amount_calculate{
+  position: sticky;
+  top: 0px;
+}
+body{
+  font-family: Arial, Helvetica, sans-serif;
+}

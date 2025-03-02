@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Invoice</title>
+	<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+<body>
+	<header class="p-3 text-bg-dark">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
+        </a>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="index.html" class="nav-link px-2 text-white">Home</a></li>
+          <li><a href="invoice.html" class="nav-link px-2 text-secondary">Invoice</a></li>
+          <li><a href="invoice-list.html" class="nav-link px-2 text-white">Invoices list</a></li>
+          <li><a href="#" class="nav-link px-2 text-white">FAQs</a></li>
+          <li><a href="#" class="nav-link px-2 text-white">About</a></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+  <div class="container">
+  <main>
+    <div class="py-5 text-center">
+      <h2>Invoice form</h2>
+    </div>
+
+    <div class="row g-5">
+      <div class="col-md-5 col-lg-4 order-md-last amount_calculate">
+        <h4 class="d-flex justify-content-between align-items-center mb-3">
+          <span class="text-primary">Amount Calculation</span>
+        </h4>
+        <ul class="list-group mb-3">
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+              <h6 class="mb-2">Labour Charges (₹)</h6>
+              <input type="number" class="form-control" id="labour_charges" placeholder="" value="">
+            </div>
+            <span class="text-body-secondary">₹ <span id="labourCharges"></span></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+              <h6 class="mb-2">P.F (%)</h6>
+              <input type="number" class="form-control" id="pf" placeholder="" value="0">
+            </div>
+            <span class="text-body-secondary">₹ <span id="pfOutput"></span></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+              <h6 class="my-0">E.S.I (3.25%)</h6>
+            </div>
+            <span class="text-body-secondary">₹ <span id="esi"></span></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+            <div class="">
+              <h6 class="my-0">L.W.F (0.4%)</h6>
+            </div>
+            <span class="">₹ <span id="lwf"></span></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between bg-body-tertiary">
+            <div class="">
+              <h6 class="mb-2">Service Charges (%)</h6>
+              <input type="number" class="form-control" id="service_charges" placeholder="" value="">
+            </div>
+            <span class="" >₹ <span id="serviceCharge"></span></span>
+          </li>
+          <li class="list-group-item d-flex justify-content-between">
+            <span class="text-success">Total (₹)</span>
+            <strong class="text-success">₹ <span id="total_amount"></span></strong>
+          </li>
+          <li class="list-group-item d-flex justify-content-between">
+            <span class="">GST (18%)</span>
+            <strong class="">₹ <span id="gst_amount"></span></strong>
+          </li>
+          <li class="list-group-item d-flex justify-content-between">
+            <span class="text-success">After GST Total (₹)</span>
+            <strong class="text-success">₹ <span id="after_gst_amount"></span></strong>
+          </li>
+        </ul>
+
+        <form class="card p-2">
+          <div class="input-group">
+            <button type="button" class="btn btn-secondary w-100" onclick="calculateAmount()">Calculate</button>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-7 col-lg-8">
+        <h4 class="mb-3">Invoice Details</h4>
+        <form class="needs-validation" novalidate="" id="pdf_convert">
+          <div class="row g-3">
+            <div class="col-sm-12">
+              <label for="company_details" class="form-label">Company Details</label>
+              <textarea class="form-control" id="company_details" rows="4">M/S INDIA RISING WAVE ARWAL, ARWAL SIPAH,ARWAL, Arwal,Bihar, 804401 GSTIN/UIN: 10CZAPK4120Q1ZL State Name: Bihar, Code: 10</textarea>
+            </div>
+            <div class="col-sm-12">
+              <label for="consignee_details" class="form-label">Consignee (Ship to)</label>
+              <textarea class="form-control" id="consignee_details" rows="4">Eastern Bearings P.Ltd.225-226, KHATA JAMABANDI, NATHUPUR ROAD, NATHUPUR, KUNDLI, Sonipat, Haryana, 131029 GSTIN/UIN: 06AABCE1150B1ZI State Name: Haryana, Code: 06</textarea>
+              
+            </div>
+            <div class="col-sm-12">
+              <label for="buyer_details" class="form-label">Buyer (Bill to)</label>
+              <textarea class="form-control" id="buyer_details" rows="4">Eastern Bearings P.Ltd. 225-226, KHATA JAMABANDI, NATHUPUR ROAD, NATHUPUR, KUNDLI, Sonipat, Haryana, 131029 GSTIN/UIN: 06AABCE1150B1ZI State Name: Haryana,Code:06</textarea>
+              
+            </div>
+            <div class="col-sm-6">
+              <label for="invoice_no" class="form-label">Invoice No. / e-Way Bill No.</label>
+              <input type="text" class="form-control" id="invoice_no" placeholder="" value="">
+            </div>
+
+            <div class="col-sm-6">
+              <label for="dated" class="form-label">Dated</label>
+              <input type="date" class="form-control" id="dated" placeholder="" value="">
+            </div>
+            <div class="col-sm-6">
+              <label for="delivery_note" class="form-label">Delivery Note</label>
+              <input type="text" class="form-control" id="delivery_note" placeholder="" value="" >
+             
+            </div>
+
+            <div class="col-sm-6">
+              <label for="mode" class="form-label">Mode/Terms of Payment</label>
+              <input type="text" class="form-control" id="mode" placeholder="" value="">
+            </div>
+            <div class="col-sm-6">
+              <label for="reference_no" class="form-label">Reference No. & Date</label>
+              <input type="text" class="form-control" id="reference_no" placeholder="" value="">
+            </div>
+
+            <div class="col-sm-6">
+              <label for="other_references" class="form-label">Other References</label>
+              <input type="text" class="form-control" id="other_references" placeholder="" value="">
+            </div>
+            <div class="col-sm-6">
+              <label for="buyers_order_no" class="form-label">Buyer's Order No.</label>
+              <input type="text" class="form-control" id="buyers_order_no" placeholder="" value="">
+            </div>
+
+            <div class="col-sm-6">
+              <label for="buyers_date" class="form-label">Dated</label>
+              <input type="date" class="form-control" id="buyers_date" placeholder="" value="">
+              
+            </div>
+            <div class="col-sm-6">
+              <label for="dispatch_doc_no" class="form-label">Dispatch Doc No.</label>
+              <input type="text" class="form-control" id="dispatch_doc_no" placeholder="" value="">
+              
+            </div>
+
+            <div class="col-sm-6">
+              <label for="delivery_note_date" class="form-label">Delivery Note Date</label>
+              <input type="date" class="form-control" id="delivery_note_date" placeholder="" value="">
+             
+            </div>
+            <div class="col-sm-6">
+              <label for="dispatch_through" class="form-label">Dispatch Through</label>
+              <input type="text" class="form-control" id="dispatch_through" placeholder="" value="">
+              
+            </div>
+
+            <div class="col-sm-6">
+              <label for="destination" class="form-label">Destination</label>
+              <input type="text" class="form-control" id="destination" placeholder="" value="" >
+            </div>
+            <div class="col-sm-12">
+              <label for="terms_of_delivery" class="form-label">Terms of Delivery</label>
+              <input type="text" class="form-control" id="terms_of_delivery" placeholder="" value="" >
+            </div>
+          </div>
+
+          <hr class="my-4">
+
+          <button class="w-100 btn btn-primary btn-lg" type="button" onclick="convertPdf()" id="btnPrint">Generate Invoice</button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <footer class="my-5 pt-5 text-body-secondary text-center text-small">
+    <p class="mb-1">© 2017–2024 Company Name</p>
+    <ul class="list-inline">
+      <li class="list-inline-item"><a href="#">Privacy</a></li>
+      <li class="list-inline-item"><a href="#">Terms</a></li>
+      <li class="list-inline-item"><a href="#">Support</a></li>
+    </ul>
+  </footer>
+</div>
+
+<!-- <div class="container mb-5" id="dvContainer">
+  
+</div> -->
+
+  <script src="bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="js/script.js"></script>
+
+</body>
+</html>
